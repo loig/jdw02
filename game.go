@@ -33,11 +33,11 @@ func (g *game) Update(screen *ebiten.Image) error {
 		hasMoved = true
 	}
 
+	g.mainChar.moveType = idle
 	if hasMoved {
-		g.mainChar.moveType = walking
-		g.moveChar()
-	} else {
-		g.mainChar.moveType = idle
+		if g.moveChar() {
+			g.mainChar.moveType = walking
+		}
 	}
 
 	g.mainChar.updateAnim()
@@ -56,7 +56,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 
 	displayCharNext := false
 	displayedChar := false
-	for startX := maxX - 1; startX > -maxY; startX-- {
+	for startX := maxX - 1; startX >= -maxY; startX-- {
 		isCharLine := false
 		for z := 0; z < maxZ; z++ {
 			y := 0
@@ -91,34 +91,6 @@ func (g *game) Draw(screen *ebiten.Image) {
 			displayCharNext = true
 		}
 	}
-
-	/*
-		for y := 0; y < len(g.field[0]); y++ {
-			for x := len(g.field[0][0]) - 1; x >= 0; x-- {
-				for z := range g.field {
-					if g.field[z][y][x].image != nil {
-						op := &ebiten.DrawImageOptions{}
-						op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144-z*120)+yshift)
-
-						screen.DrawImage(g.field[z][y][x].image, op)
-					}
-					if g.mainChar.posZ == z {
-						if g.mainChar.posX >= float64(x)-0.5 &&
-							g.mainChar.posX < float64(x)+1 {
-							if g.mainChar.posY >= float64(y)-1 &&
-								g.mainChar.posY < float64(y)+0.5 {
-								op := &ebiten.DrawImageOptions{}
-								op.GeoM.Scale(3, 3)
-								op.GeoM.Translate(g.mainChar.posX*256+g.mainChar.posY*256+xshift+50, g.mainChar.posY*154-g.mainChar.posX*144-float64(g.mainChar.posZ*120)+yshift-370)
-
-								screen.DrawImage(g.mainChar.currentImage, op)
-							}
-						}
-					}
-				}
-			}
-		}
-	*/
 
 	return
 }

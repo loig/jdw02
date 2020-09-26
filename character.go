@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"image"
+	"math"
 
 	"github.com/hajimehoshi/ebiten"
 )
@@ -62,7 +64,7 @@ func makeEtna(x, y float64, z int) character {
 	return c
 }
 
-func (g *game) moveChar() {
+func (g *game) moveChar() bool {
 	var dX, dY float64
 	switch g.mainChar.direction {
 	case 0:
@@ -74,6 +76,29 @@ func (g *game) moveChar() {
 	case 3:
 		dY = 0.015
 	}
-	g.mainChar.posX += dX
-	g.mainChar.posY += dY
+	newX := g.mainChar.posX + dX
+	newY := g.mainChar.posY + dY
+	if newX < 0 || newY < 0 ||
+		newX >= float64(len(g.field[0][0]))-1 ||
+		newY >= float64(len(g.field[0]))-1 {
+		return false
+	}
+	newXInt := int(math.Round(newX))
+	newYInt := int(math.Round(newY))
+	fmt.Println(newXInt, newYInt)
+	z := g.mainChar.posZ
+	if z+2 < len(g.field) && g.field[z+2][newYInt][newXInt] != nilTile {
+		return false
+	}
+	if z+1 < len(g.field) && g.field[z+1][newYInt][newXInt] != nilTile {
+		g.mainChar.posZ++
+	} else if g.field[z][newYInt][newXInt] == nilTile {
+		if z-1 >= 0 && g.field[z-1][newYInt][newXInt] == nilTile {
+			return false
+		}
+		g.mainChar.posZ--
+	}
+	g.mainChar.posX = newX
+	g.mainChar.posY = newY
+	return true
 }
