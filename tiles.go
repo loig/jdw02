@@ -9,3 +9,4 @@ type tile struct {
 var nilTile tile = tile{image: nil}
 var grassTile tile
 var roadTile tile
+var snowTile tile

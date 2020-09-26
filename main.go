@@ -8,6 +8,7 @@ import (
 
 func main() {
 	g := &game{
+		mainChar: makeEtna(1, 2, 0),
 		field: [][][]tile{
 			[][]tile{
 				[]tile{
@@ -17,7 +18,7 @@ func main() {
 					roadTile, roadTile, roadTile, roadTile,
 				},
 				[]tile{
-					grassTile, grassTile, grassTile, grassTile,
+					grassTile, snowTile, grassTile, grassTile,
 				},
 				[]tile{
 					grassTile, grassTile, grassTile, grassTile,

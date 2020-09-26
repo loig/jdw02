@@ -5,6 +5,7 @@
 *.so
 *.dylib
 jdw02
+assets/etna.png
 
 # Test binary, built with `go test -c`
 *.test
