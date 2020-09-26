@@ -61,3 +61,19 @@ func makeEtna(x, y float64, z int) character {
 	}
 	return c
 }
+
+func (g *game) moveChar() {
+	var dX, dY float64
+	switch g.mainChar.direction {
+	case 0:
+		dX = -0.015
+	case 1:
+		dY = -0.015
+	case 2:
+		dX = 0.015
+	case 3:
+		dY = 0.015
+	}
+	g.mainChar.posX += dX
+	g.mainChar.posY += dY
+}

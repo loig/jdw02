@@ -11,6 +11,35 @@ type game struct {
 
 func (g *game) Update(screen *ebiten.Image) error {
 
+	var hasMoved bool
+
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		g.mainChar.direction = 0
+		hasMoved = true
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyUp) {
+		g.mainChar.direction = 1
+		hasMoved = true
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		g.mainChar.direction = 2
+		hasMoved = true
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyDown) {
+		g.mainChar.direction = 3
+		hasMoved = true
+	}
+
+	if hasMoved {
+		g.mainChar.moveType = walking
+		g.moveChar()
+	} else {
+		g.mainChar.moveType = idle
+	}
+
 	g.mainChar.updateAnim()
 
 	return nil
@@ -32,12 +61,12 @@ func (g *game) Draw(screen *ebiten.Image) {
 				}
 				if g.mainChar.posZ == z {
 					if g.mainChar.posX >= float64(x)-0.5 &&
-						g.mainChar.posX < float64(x)+0.5 {
-						if g.mainChar.posY >= float64(y)-0.5 &&
+						g.mainChar.posX < float64(x)+1 {
+						if g.mainChar.posY >= float64(y)-1 &&
 							g.mainChar.posY < float64(y)+0.5 {
 							op := &ebiten.DrawImageOptions{}
 							op.GeoM.Scale(3, 3)
-							op.GeoM.Translate(float64(x*256+y*256)+xshift+50, float64(y*154-x*144-z*120)+yshift-370)
+							op.GeoM.Translate(g.mainChar.posX*256+g.mainChar.posY*256+xshift+50, g.mainChar.posY*154-g.mainChar.posX*144-float64(g.mainChar.posZ*120)+yshift-370)
 
 							screen.DrawImage(g.mainChar.currentImage, op)
 						}
