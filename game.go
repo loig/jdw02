@@ -17,13 +17,15 @@ func (g *game) Draw(screen *ebiten.Image) {
 	yshift := float64(1600 - 150)
 	xshift := float64(3200 - 500)
 
-	for _, level := range g.field {
-		for y, line := range level {
-			for x := len(line) - 1; x >= 0; x-- {
-				op := &ebiten.DrawImageOptions{}
-				op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144)+yshift)
+	for y := 0; y < len(g.field[0]); y++ {
+		for x := len(g.field[0][0]) - 1; x >= 0; x-- {
+			for z := range g.field {
+				if g.field[z][y][x].image != nil {
+					op := &ebiten.DrawImageOptions{}
+					op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144-z*120)+yshift)
 
-				screen.DrawImage(line[x].image, op)
+					screen.DrawImage(g.field[z][y][x].image, op)
+				}
 			}
 		}
 	}

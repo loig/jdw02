@@ -23,6 +23,34 @@ func main() {
 					grassTile, grassTile, grassTile, grassTile,
 				},
 			},
+			[][]tile{
+				[]tile{
+					nilTile, nilTile, grassTile, grassTile,
+				},
+				[]tile{
+					nilTile, roadTile, roadTile, nilTile,
+				},
+				[]tile{
+					nilTile, nilTile, nilTile, nilTile,
+				},
+				[]tile{
+					nilTile, nilTile, nilTile, nilTile,
+				},
+			},
+			[][]tile{
+				[]tile{
+					nilTile, nilTile, grassTile, grassTile,
+				},
+				[]tile{
+					nilTile, nilTile, roadTile, nilTile,
+				},
+				[]tile{
+					nilTile, nilTile, nilTile, nilTile,
+				},
+				[]tile{
+					nilTile, nilTile, nilTile, nilTile,
+				},
+			},
 		},
 	}
 	ebiten.SetWindowSize(1280, 640)
