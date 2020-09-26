@@ -50,31 +50,75 @@ func (g *game) Draw(screen *ebiten.Image) {
 	yshift := float64(1600 - 150)
 	xshift := float64(3200 - 500)
 
-	for y := 0; y < len(g.field[0]); y++ {
-		for x := len(g.field[0][0]) - 1; x >= 0; x-- {
-			for z := range g.field {
-				if g.field[z][y][x].image != nil {
-					op := &ebiten.DrawImageOptions{}
-					op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144-z*120)+yshift)
+	maxX := len(g.field[0][0])
+	maxY := len(g.field[0])
+	maxZ := len(g.field)
 
-					screen.DrawImage(g.field[z][y][x].image, op)
+	displayCharNext := false
+	displayedChar := false
+	for startX := maxX - 1; startX > -maxY; startX-- {
+		isCharLine := false
+		for z := 0; z < maxZ; z++ {
+			y := 0
+			for x := startX; x < maxX; x++ {
+				if x >= 0 && y < maxY {
+					if g.field[z][y][x].image != nil {
+						op := &ebiten.DrawImageOptions{}
+						op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144-z*120)+yshift)
+						screen.DrawImage(g.field[z][y][x].image, op)
+					}
+					if g.mainChar.posZ == z &&
+						g.mainChar.posX >= float64(x)-0.5 &&
+						g.mainChar.posX <= float64(x)+0.5 &&
+						g.mainChar.posY >= float64(y)-0.5 &&
+						g.mainChar.posY <= float64(y)+0.5 {
+						isCharLine = true
+					}
 				}
-				if g.mainChar.posZ == z {
-					if g.mainChar.posX >= float64(x)-0.5 &&
-						g.mainChar.posX < float64(x)+1 {
-						if g.mainChar.posY >= float64(y)-1 &&
-							g.mainChar.posY < float64(y)+0.5 {
-							op := &ebiten.DrawImageOptions{}
-							op.GeoM.Scale(3, 3)
-							op.GeoM.Translate(g.mainChar.posX*256+g.mainChar.posY*256+xshift+50, g.mainChar.posY*154-g.mainChar.posX*144-float64(g.mainChar.posZ*120)+yshift-370)
+				y++
+			}
+			if displayCharNext && !displayedChar &&
+				z == g.mainChar.posZ {
+				op := &ebiten.DrawImageOptions{}
+				op.GeoM.Scale(3, 3)
+				op.GeoM.Translate(g.mainChar.posX*256+g.mainChar.posY*256+xshift+50, g.mainChar.posY*154-g.mainChar.posX*144-float64(g.mainChar.posZ*120)+yshift-370)
 
-							screen.DrawImage(g.mainChar.currentImage, op)
+				screen.DrawImage(g.mainChar.currentImage, op)
+				displayedChar = true
+			}
+		}
+		if isCharLine {
+			displayCharNext = true
+		}
+	}
+
+	/*
+		for y := 0; y < len(g.field[0]); y++ {
+			for x := len(g.field[0][0]) - 1; x >= 0; x-- {
+				for z := range g.field {
+					if g.field[z][y][x].image != nil {
+						op := &ebiten.DrawImageOptions{}
+						op.GeoM.Translate(float64(x*256+y*256)+xshift, float64(y*154-x*144-z*120)+yshift)
+
+						screen.DrawImage(g.field[z][y][x].image, op)
+					}
+					if g.mainChar.posZ == z {
+						if g.mainChar.posX >= float64(x)-0.5 &&
+							g.mainChar.posX < float64(x)+1 {
+							if g.mainChar.posY >= float64(y)-1 &&
+								g.mainChar.posY < float64(y)+0.5 {
+								op := &ebiten.DrawImageOptions{}
+								op.GeoM.Scale(3, 3)
+								op.GeoM.Translate(g.mainChar.posX*256+g.mainChar.posY*256+xshift+50, g.mainChar.posY*154-g.mainChar.posX*144-float64(g.mainChar.posZ*120)+yshift-370)
+
+								screen.DrawImage(g.mainChar.currentImage, op)
+							}
 						}
 					}
 				}
 			}
 		}
-	}
+	*/
 
 	return
 }
