@@ -83,8 +83,8 @@ func (g *game) moveChar() bool {
 		newY >= float64(len(g.field[0]))-1 {
 		return false
 	}
-	newXInt := int(math.Round(newX))
-	newYInt := int(math.Round(newY))
+	newXInt := int(math.Round(newX + 10*dX))
+	newYInt := int(math.Round(newY + 10*dY))
 	fmt.Println(newXInt, newYInt)
 	z := g.mainChar.posZ
 	if z+2 < len(g.field) && g.field[z+2][newYInt][newXInt] != nilTile {
